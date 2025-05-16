@@ -1,0 +1,220 @@
+{% extends "store/base.html" %}
+{% load static %}
+
+{% block title %}Product Detail: {{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'store:admin_dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'store:admin_product_list' %}">Products</a></li>
+            <li class="breadcrumb-item active">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Details Card -->
+        <div class="col-lg-8">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                    <h5 class="mb-0">Product Details</h5>
+                    <div>
+                        <a href="{% url 'store:admin_product_update' product.id %}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a href="{% url 'store:admin_product_delete' product.id %}" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i> Delete
+                        </a>
+                        <a href="{% url 'store:product_detail' product.id %}" class="btn btn-sm btn-info" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> View on Site
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <!-- Product Image -->
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <div class="position-relative mb-3">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid rounded">
+                                    {% if product.is_premium %}
+                                        <span class="position-absolute top-0 end-0 badge bg-warning text-dark m-2">Premium</span>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 200px;">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Additional Images -->
+                            <div class="row">
+                                {% for img in images %}
+                                    <div class="col-4 mb-2">
+                                        <img src="{{ img.image.url }}" alt="{{ img.alt_text }}" class="img-thumbnail">
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Product Info -->
+                        <div class="col-md-8">
+                            <h2>{{ product.name }}</h2>
+                            
+                            <!-- Price and Status -->
+                            <div class="mb-3">
+                                {% if product.discount_percentage > 0 %}
+                                    <span class="text-decoration-line-through text-muted me-2">${{ product.price }}</span>
+                                    <span class="h3 text-success">${{ product.get_discounted_price }}</span>
+                                    <span class="badge bg-danger ms-2">{{ product.discount_percentage }}% OFF</span>
+                                {% else %}
+                                    <span class="h3">${{ product.price }}</span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Status Badges -->
+                            <div class="mb-3">
+                                {% if product.available %}
+                                    <span class="badge bg-success me-1">Active</span>
+                                {% else %}
+                                    <span class="badge bg-secondary me-1">Inactive</span>
+                                {% endif %}
+                                
+                                {% if product.featured %}
+                                    <span class="badge bg-info me-1">Featured</span>
+                                {% endif %}
+                                
+                                {% if product.is_premium %}
+                                    <span class="badge bg-warning text-dark me-1">Premium</span>
+                                {% endif %}
+                                
+                                {% if product.limited_edition %}
+                                    <span class="badge bg-dark me-1">Limited Edition</span>
+                                {% endif %}
+                                
+                                {% if product.has_free_shipping %}
+                                    <span class="badge bg-primary me-1">Free Shipping</span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Stock Info -->
+                            <div class="mb-3">
+                                <h5>Stock Status</h5>
+                                {% if product.stock > 10 %}
+                                    <div class="progress">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="{{ product.stock }}" aria-valuemin="0" aria-valuemax="{{ product.stock }}"></div>
+                                    </div>
+                                    <small class="text-muted mt-1 d-block">{{ product.stock }} items in stock</small>
+                                {% elif product.stock > 0 %}
+                                    <div class="progress">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="{{ product.stock }}" aria-valuemin="0" aria-valuemax="10"></div>
+                                    </div>
+                                    <small class="text-muted mt-1 d-block">Only {{ product.stock }} items left</small>
+                                {% else %}
+                                    <div class="progress">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="10"></div>
+                                    </div>
+                                    <small class="text-danger mt-1 d-block">Out of stock</small>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Category -->
+                            <div class="mb-3">
+                                <h5>Category</h5>
+                                <p>{{ product.category.name }}</p>
+                            </div>
+                            
+                            <!-- Additional Info -->
+                            <div class="mb-3">
+                                <h5>Product ID</h5>
+                                <p>{{ product.id }}</p>
+                            </div>
+                            
+                            <!-- Dates -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Created</h5>
+                                    <p>{{ product.created_at|date:"M d, Y" }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Last Updated</h5>
+                                    <p>{{ product.updated_at|date:"M d, Y" }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Product Description -->
+                    <div class="mt-4">
+                        <h4>Description</h4>
+                        <div class="border-top pt-3">
+                            {{ product.description|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats and Actions -->
+        <div class="col-lg-4">
+            <!-- Quick Actions -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{% url 'store:admin_product_update' product.id %}" class="btn btn-outline-primary">
+                            <i class="fas fa-edit me-2"></i>Edit Product
+                        </a>
+                        <a href="{% url 'store:admin_product_delete' product.id %}" class="btn btn-outline-danger">
+                            <i class="fas fa-trash me-2"></i>Delete Product
+                        </a>
+                        <a href="{% url 'store:product_detail' product.id %}" class="btn btn-outline-info" target="_blank">
+                            <i class="fas fa-external-link-alt me-2"></i>View on Site
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats Card -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Product Stats</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Orders
+                            <span class="badge bg-primary rounded-pill">{{ order_count }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Rating
+                            <span class="badge bg-warning text-dark rounded-pill">
+                                {{ product.get_average_rating|floatformat:1 }} / 5.0
+                            </span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Reviews
+                            <span class="badge bg-info rounded-pill">{{ product.get_review_count }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Related Category Items -->
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Category: {{ product.category.name }}</h5>
+                </div>
+                <div class="card-body">
+                    <a href="{% url 'store:admin_product_list' %}?category={{ product.category.id }}" class="btn btn-sm btn-outline-secondary">
+                        View all products in this category
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

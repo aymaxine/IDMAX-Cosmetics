@@ -1,0 +1,161 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Update Order #{{ order.id }} - IDMAX Cosmetics{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'store:admin_dashboard' %}">Admin Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'store:admin_order_list' %}">Order Management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Update Order #{{ order.id }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Order #{{ order.id }} Details</h5>
+                <span class="badge {% if order.status == 'completed' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% elif order.status == 'pending' %}bg-warning{% elif order.status == 'processing' %}bg-info{% elif order.status == 'shipped' %}bg-primary{% else %}bg-secondary{% endif %}">
+                    {{ order.get_status_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Order Information</h6>
+                        <p class="mb-1"><strong>Order Date:</strong> {{ order.created_at|date:"F j, Y, g:i a" }}</p>
+                        <p class="mb-1"><strong>Total Amount:</strong> ${{ order.total_price|floatformat:2 }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Customer Information</h6>
+                        <p class="mb-1"><strong>Customer:</strong> {{ order.user.username }}</p>
+                        <p class="mb-1"><strong>Name:</strong> {{ order.first_name }} {{ order.last_name }}</p>
+                        <p class="mb-1"><strong>Email:</strong> {{ order.email }}</p>
+                        <p class="mb-1"><strong>Phone:</strong> {{ order.phone }}</p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h6>Shipping Address</h6>
+                    <p class="mb-1">{{ order.address }}</p>
+                    <p class="mb-1">{{ order.city }}, {{ order.postal_code }}</p>
+                    <p class="mb-1">{{ order.country }}</p>
+                </div>
+
+                <h6>Order Items</h6>
+                <div class="table-responsive mb-4">
+                    <table class="table table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th class="text-end">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                            <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td>${{ item.price|floatformat:2 }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td class="text-end">${{ item.get_cost|floatformat:2 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-light">
+                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                <td class="text-end"><strong>${{ order.total_price|floatformat:2 }}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                {% if order.notes %}
+                <div class="mb-4">
+                    <h6>Order Notes</h6>
+                    <p>{{ order.notes }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Update Order Status</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="{{ form.status.id_for_label }}" class="form-label">Order Status</label>
+                        {{ form.status }}
+                        {% if form.status.errors %}
+                        <div class="text-danger">
+                            {% for error in form.status.errors %}
+                            {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Update Status
+                        </button>
+                        <a href="{% url 'store:admin_order_list' %}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Orders
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">Status History</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Created</strong>
+                            <div class="text-muted small">{{ order.created_at|date:"F j, Y, g:i a" }}</div>
+                        </div>
+                        <span class="badge bg-info">Order Placed</span>
+                    </li>
+                    {% if order.status != 'pending' %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>Updated</strong>
+                            <div class="text-muted small">{{ order.updated_at|date:"F j, Y, g:i a" }}</div>
+                        </div>
+                        <span class="badge {% if order.status == 'completed' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% elif order.status == 'processing' %}bg-info{% elif order.status == 'shipped' %}bg-primary{% else %}bg-secondary{% endif %}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add Bootstrap form classes to form fields
+    document.addEventListener('DOMContentLoaded', function() {
+        const formControls = document.querySelectorAll('select');
+        formControls.forEach(control => {
+            if (!control.classList.contains('form-select')) {
+                control.classList.add('form-select');
+            }
+        });
+    });
+</script>
+{% endblock %}

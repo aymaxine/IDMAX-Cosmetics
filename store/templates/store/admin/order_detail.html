@@ -1,0 +1,179 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Admin - Order #{{ order.id }} Details - E-Commerce Store{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'store:admin_dashboard' %}">Admin Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'store:admin_order_list' %}">Order Management</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Order #{{ order.id }}</li>
+    </ol>
+</nav>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Order #{{ order.id }} Details</h1>
+    <a href="{% url 'store:admin_order_list' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Orders
+    </a>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Order Information</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th>Order Date:</th>
+                        <td>{{ order.created_at|date:"F j, Y, g:i a" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>
+                            <span class="badge {% if order.status == 'completed' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% elif order.status == 'pending' %}bg-warning{% elif order.status == 'processing' %}bg-info{% elif order.status == 'shipped' %}bg-primary{% else %}bg-secondary{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Payment Method:</th>
+                        <td>{{ order.payment_method }}</td>
+                    </tr>
+                    <tr>
+                        <th>Subtotal:</th>
+                        <td>${{ order.subtotal_price|floatformat:2 }}</td>
+                    </tr>
+                    {% if order.coupon %}
+                    <tr>
+                        <th>Coupon:</th>
+                        <td>{{ order.coupon.code }} (- ${{ order.discount_amount|floatformat:2 }})</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Total:</th>
+                        <td><strong>${{ order.total_price|floatformat:2 }}</strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Customer Information</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr>
+                        <th>Customer:</th>
+                        <td>{{ order.user.username }} ({{ order.user.email }})</td>
+                    </tr>
+                    <tr>
+                        <th>Name:</th>
+                        <td>{{ order.first_name }} {{ order.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>{{ order.email }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone:</th>
+                        <td>{{ order.phone }}</td>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td>
+                            {{ order.address }}<br>
+                            {{ order.city }}, {{ order.state }} {{ order.zipcode }}<br>
+                            {{ order.country }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Order Items</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th class="text-end">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                {% if item.product.image %}
+                                <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-thumbnail me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                                {% else %}
+                                <div class="bg-secondary text-white rounded me-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-image"></i>
+                                </div>
+                                {% endif %}
+                                <div>
+                                    <a href="{% url 'store:product_detail' item.product.id %}" class="text-decoration-none fw-bold">
+                                        {{ item.product.name }}
+                                    </a>
+                                    {% if item.product.category %}
+                                    <div class="small text-muted">{{ item.product.category.name }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td>${{ item.price|floatformat:2 }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td class="text-end">${{ item.get_cost|floatformat:2 }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No items in this order.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    {% if order.coupon %}
+                    <tr>
+                        <td colspan="3" class="text-end">Subtotal:</td>
+                        <td class="text-end">${{ order.subtotal_price|floatformat:2 }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-end">Discount ({{ order.coupon.code }}):</td>
+                        <td class="text-end">-${{ order.discount_amount|floatformat:2 }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr class="table-dark">
+                        <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                        <td class="text-end"><strong>${{ order.total_price|floatformat:2 }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between mt-4">
+    <a href="{% url 'store:admin_order_list' %}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Back to Orders
+    </a>
+    <a href="{% url 'store:admin_order_update' order.id %}" class="btn btn-primary">
+        <i class="fas fa-edit me-2"></i>Update Order
+    </a>
+</div>
+{% endblock %}

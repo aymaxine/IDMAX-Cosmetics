@@ -1,0 +1,286 @@
+{% extends "store/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    {% if form.instance.id %}Edit{% else %}Create{% endif %} Product
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .image-preview {
+        max-width: 150px;
+        max-height: 150px;
+        margin-top: 10px;
+    }
+    
+    .form-section {
+        padding: 1.5rem;
+        border-radius: 0.375rem;
+        background-color: #fff;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-section-header {
+        font-size: 1.25rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'store:admin_dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'store:admin_product_list' %}">Products</a></li>
+            <li class="breadcrumb-item active">
+                {% if form.instance.id %}Edit: {{ form.instance.name }}{% else %}Create Product{% endif %}
+            </li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <form method="post" enctype="multipart/form-data" id="productForm">
+                {% csrf_token %}
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-light">
+                        <h4 class="mb-0">
+                            {% if form.instance.id %}
+                            <i class="fas fa-edit me-2"></i>Edit Product: {{ form.instance.name }}
+                            {% else %}
+                            <i class="fas fa-plus-circle me-2"></i>Create New Product
+                            {% endif %}
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <strong>Please correct the errors below:</strong>
+                            {{ form.errors }}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Basic Information Section -->
+                        <div class="form-section">
+                            <h5 class="form-section-header">Basic Information</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-8">
+                                    {{ form.name|as_crispy_field }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.category|as_crispy_field }}
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ form.description|as_crispy_field }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Pricing & Inventory Section -->
+                        <div class="form-section">
+                            <h5 class="form-section-header">Pricing & Inventory</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {{ form.price|as_crispy_field }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.discount_percentage|as_crispy_field }}
+                                </div>
+                                <div class="col-md-4">
+                                    {{ form.stock|as_crispy_field }}
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        {{ form.available }}
+                                        <label class="form-check-label" for="{{ form.available.id_for_label }}">
+                                            Available for sale
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        {{ form.featured }}
+                                        <label class="form-check-label" for="{{ form.featured.id_for_label }}">
+                                            Featured product
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        {{ form.is_premium }}
+                                        <label class="form-check-label" for="{{ form.is_premium.id_for_label }}">
+                                            Premium product
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        {{ form.limited_edition }}
+                                        <label class="form-check-label" for="{{ form.limited_edition.id_for_label }}">
+                                            Limited edition
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-3">
+                                    <div class="form-check">
+                                        {{ form.has_free_shipping }}
+                                        <label class="form-check-label" for="{{ form.has_free_shipping.id_for_label }}">
+                                            Free shipping
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Main Product Image Section -->
+                        <div class="form-section">
+                            <h5 class="form-section-header">Main Product Image</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{ form.image|as_crispy_field }}
+                                    
+                                    {% if form.instance.image %}
+                                    <div class="mt-2">
+                                        <p><strong>Current image:</strong></p>
+                                        <img src="{{ form.instance.image.url }}" alt="{{ form.instance.name }}" class="image-preview">
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        <strong>Image Guidelines:</strong>
+                                        <ul class="mb-0 mt-2">
+                                            <li>Use high-quality images with good lighting</li>
+                                            <li>Recommended size: 800x800 pixels</li>
+                                            <li>Maximum file size: 5MB</li>
+                                            <li>Supported formats: JPG, PNG</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Images Section -->
+                        <div class="form-section">
+                            <h5 class="form-section-header">Additional Product Images</h5>
+                            
+                            {{ image_formset.management_form }}
+                            
+                            {% for image_form in image_formset.forms %}
+                            <div class="formset-form mb-4">
+                                <div class="card">
+                                    <div class="card-header bg-light">
+                                        Image #{{ forloop.counter }}
+                                        
+                                        {% if image_formset.can_delete and image_form.instance.id %}
+                                        <div class="float-end">
+                                            <div class="form-check">
+                                                {{ image_form.DELETE }}
+                                                <label class="form-check-label text-danger" for="{{ image_form.DELETE.id_for_label }}">
+                                                    Delete this image
+                                                </label>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {% for hidden_field in image_form.hidden_fields %}
+                                                    {{ hidden_field }}
+                                                {% endfor %}
+                                                
+                                                {{ image_form.image|as_crispy_field }}
+                                                
+                                                {% if image_form.instance.id %}
+                                                <div class="mt-2">
+                                                    <img src="{{ image_form.instance.image.url }}" alt="Product image" class="image-preview">
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ image_form.alt_text|as_crispy_field }}
+                                                
+                                                <div class="form-check">
+                                                    {{ image_form.is_primary }}
+                                                    <label class="form-check-label" for="{{ image_form.is_primary.id_for_label }}">
+                                                        Set as primary image
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'store:admin_product_list' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancel & Return to List
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Save Product
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Preview image when selected
+    $('input[type="file"]').change(function() {
+        const input = this;
+        const formGroup = $(input).closest('.form-group');
+        
+        // Remove existing preview
+        formGroup.find('.preview-image').remove();
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const img = $('<img class="mt-2 image-preview preview-image" />');
+                img.attr('src', e.target.result);
+                formGroup.append(img);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    });
+
+    // Only allow one primary image
+    $('input[name$="-is_primary"]').change(function() {
+        if ($(this).is(':checked')) {
+            $('input[name$="-is_primary"]').not(this).prop('checked', false);
+        }
+    });
+});
+</script>
+{% endblock %}

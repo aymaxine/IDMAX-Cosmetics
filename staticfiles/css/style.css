@@ -1,0 +1,491 @@
+/* IDMax E-Commerce Store - Main Stylesheet */
+
+/* Theme variables */
+:root {
+    /* Light theme variables */
+    --bg-color: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    --bg-pattern-color: rgba(0, 0, 0, 0.03);
+    --text-color: #212529;
+    --navbar-bg: #ffffff;
+    --card-bg: #ffffff;
+    --footer-bg: #e0e5ec;
+    --preloader-bg: rgba(255, 255, 255, 0.9);
+    --spinner-border: #f3f3f3;
+    --spinner-border-top: #3498db;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --input-bg: #ffffff;
+    --input-border: #ced4da;
+}
+
+[data-bs-theme="dark"] {
+    /* Dark theme variables */
+    --bg-color: linear-gradient(135deg, #2c3e50 0%, #1a1a2e 100%);
+    --bg-pattern-color: rgba(255, 255, 255, 0.03);
+    --text-color: #f8f9fa;
+    --navbar-bg: #212529;
+    --card-bg: #2c3e50;
+    --footer-bg: #212529;
+    --preloader-bg: rgba(33, 37, 41, 0.9);
+    --spinner-border: #2c3e50;
+    --spinner-border-top: #0dcaf0;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --input-bg: #343a40;
+    --input-border: #495057;
+}
+
+/* Typography */
+body, button, input, select, textarea {
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+}
+
+/* Preloader styles */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--preloader-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--spinner-border);
+    border-top: 5px solid var(--spinner-border-top);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Base styles */
+.navbar-brand {
+    font-weight: bold;
+}
+
+.footer {
+    padding: 20px 0;
+    background-color: var(--footer-bg);
+    box-shadow: 0 -2px 10px var(--shadow-color);
+    margin-top: auto;
+}
+
+/* Product card styles */
+.product-card {
+    height: 100%;
+    transition: transform 0.3s;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+/* Cart icon styles */
+.cart-icon {
+    position: relative;
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Theme toggle styles */
+.theme-toggle {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+.theme-toggle i {
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover i {
+    transform: rotate(30deg);
+}
+
+/* Responsive improvements */
+@media (max-width: 767.98px) {
+    /* Improve touch targets on mobile */
+    .btn, .nav-link, .dropdown-item {
+        padding: 0.5rem 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+
+    /* Better spacing for mobile */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    /* Improve form elements on mobile */
+    input, select, textarea {
+        font-size: 16px !important; /* Prevents iOS zoom on focus */
+    }
+
+    /* Improve card readability on mobile */
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    /* Ensure images don't overflow on small screens */
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Improve navbar on mobile */
+    .navbar-nav {
+        margin-top: 0.5rem;
+    }
+
+    .navbar .dropdown-menu {
+        border: none;
+        background-color: rgba(0, 0, 0, 0.03);
+        margin-left: 1rem;
+    }
+
+    /* Improve button spacing on mobile */
+    .btn-group, .btn-group-vertical, .d-grid {
+        width: 100%;
+    }
+
+    /* Improve form layout on mobile */
+    .form-row {
+        margin-bottom: 0;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    /* Better spacing for headings on mobile */
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    /* Improve table display on small screens */
+    .table-responsive {
+        margin-bottom: 1rem;
+        border-radius: 0.25rem;
+        overflow: hidden;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 575.98px) {
+    /* Further optimize for very small screens */
+    .container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    /* Stack buttons on very small screens */
+    .d-flex:not(.align-items-center):not(.navbar-nav) {
+        flex-direction: column !important;
+    }
+
+    .d-flex:not(.align-items-center):not(.navbar-nav) .btn {
+        margin-bottom: 0.5rem;
+        width: 100%;
+    }
+
+    /* Adjust card padding on small screens */
+    .card-body {
+        padding: 0.75rem;
+    }
+
+    /* Improve footer on small screens */
+    .footer .col-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Handle text overflow */
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Page Transition Effects */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    animation: fadeIn 0.5s ease-in-out;
+    background: var(--bg-color);
+    background-image: radial-gradient(var(--bg-pattern-color) 1px, transparent 1px),
+    radial-gradient(var(--bg-pattern-color) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color);
+    transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* Apply theme colors to common elements */
+.card {
+    background-color: var(--card-bg);
+    transition: all 0.3s ease, background-color 0.5s ease;
+}
+
+.navbar {
+    background-color: var(--navbar-bg) !important;
+    transition: background-color 0.5s ease;
+}
+
+input, select, textarea, .form-control {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--text-color);
+    transition: all 0.3s ease, background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Button transitions */
+.btn {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+.btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Primary button special effects */
+.btn-primary {
+    transition: all 0.3s ease;
+}
+
+.btn-primary:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s ease;
+}
+
+.btn-primary:hover:before {
+    left: 100%;
+}
+
+/* Image transitions */
+.card-img-top {
+    transition: all 0.5s ease;
+}
+
+.card:hover .card-img-top {
+    transform: scale(1.03);
+}
+
+/* Card transitions for all cards */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 5px 15px var(--shadow-color);
+}
+
+/* Form element transitions */
+input, select, textarea, .form-control {
+    transition: all 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus, .form-control:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color);
+}
+
+/* Navigation link transitions */
+.nav-link, .dropdown-item {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link:after, .dropdown-item:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #0d6efd;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover:after, .dropdown-item:hover:after {
+    width: 100%;
+    height: 1px;
+}
+
+/* Alert transitions */
+.alert {
+    animation: slideDown 0.5s ease-in-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Jumbotron transitions */
+.jumbotron {
+    animation: fadeInUp 0.8s ease-out;
+    transition: all 0.3s ease;
+}
+
+.jumbotron:hover {
+    box-shadow: 0 8px 20px var(--shadow-color);
+    transform: translateY(-5px);
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Breadcrumb transitions */
+.breadcrumb {
+    animation: fadeInRight 0.5s ease-out;
+}
+
+@keyframes fadeInRight {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Product image transitions */
+.product-detail-img {
+    transition: all 0.5s ease;
+    transform-origin: center;
+}
+
+.product-detail-img:hover {
+    transform: scale(1.05);
+}
+
+/* Section transitions */
+section {
+    animation: fadeIn 0.8s ease-out;
+    animation-fill-mode: both;
+}
+
+section:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+section:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Footer transitions */
+.footer {
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 1s ease-out;
+}
+
+.footer:before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #0d6efd, #6610f2, #0dcaf0);
+    animation: gradientFlow 3s linear infinite;
+    background-size: 200% 100%;
+}
+
+@keyframes gradientFlow {
+    0% {
+        background-position: 0% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.dropdown-toggle::after {
+    border-right: 0 solid transparent;
+    border-left: 0 solid transparent;
+}

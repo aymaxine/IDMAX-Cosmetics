@@ -1,0 +1,113 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Your Shopping Cart - IDMAX Cosmetics{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Your Shopping Cart</h1>
+
+{% if cart_items %}
+<div class="table-responsive mb-4">
+    <table class="table table-hover">
+        <thead class="table-light">
+            <tr>
+                <th scope="col">Product</th>
+                <th scope="col" class="d-none d-sm-table-cell">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Subtotal</th>
+                <th scope="col" class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        {% if item.product.image %}
+                        <img src="/media/product_images/{{ item.product.image|cut:'product_images/' }}" alt="{{ item.product.name }}" class="img-thumbnail me-2 me-sm-3" style="width: 50px; height: 50px; object-fit: cover;">
+                        {% else %}
+                        <div class="bg-light text-center me-2 me-sm-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <a href="{% url 'store:product_detail' item.product.id %}" class="text-decoration-none">
+                                <h6 class="mb-0 text-truncate" style="max-width: 120px;">{{ item.product.name }}</h6>
+                            </a>
+                            <small class="text-muted d-none d-sm-inline">{{ item.product.category.name }}</small>
+                            <small class="d-inline d-sm-none text-primary">${{ item.product.price|floatformat:2 }}</small>
+                        </div>
+                    </div>
+                </td>
+                <td class="d-none d-sm-table-cell">${{ item.product.price|floatformat:2 }}</td>
+                <td>
+                    <form action="{% url 'store:cart_add' item.product.id %}" method="post" class="d-flex align-items-center">
+                        {% csrf_token %}
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="form-control form-control-sm" style="width: 50px; padding: 0.25rem 0.5rem;">
+                        <button type="submit" class="btn btn-sm btn-outline-secondary ms-1" title="Update">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </form>
+                </td>
+                <td class="fw-bold">${{ item.get_price|floatformat:2 }}</td>
+                <td class="text-center">
+                    <a href="{% url 'store:cart_remove' item.product.id %}" class="btn btn-sm btn-danger d-flex align-items-center justify-content-center mx-auto" style="width: fit-content;">
+                        <i class="fas fa-trash"></i>
+                        <span class="d-none d-md-inline ms-1">Remove</span>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="table-light">
+                <td colspan="2" class="d-none d-sm-table-cell text-end"><strong>Total:</strong></td>
+                <td colspan="1" class="d-table-cell d-sm-none text-end"><strong>Total:</strong></td>
+                <td class="fw-bold">${{ cart_total|default:"0.00"|floatformat:2 }}</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="d-flex flex-column flex-md-row justify-content-between">
+    <a href="{% url 'store:product_list' %}" class="btn btn-outline-secondary mb-2 mb-md-0">
+        <i class="fas fa-arrow-left me-2"></i><span class="d-none d-sm-inline">Continue Shopping</span><span class="d-inline d-sm-none">Back</span>
+    </a>
+    <a href="{% url 'store:order_create' %}" class="btn btn-success">
+        <i class="fas fa-check me-2"></i><span class="d-none d-sm-inline">Proceed to Checkout</span><span class="d-inline d-sm-none">Checkout</span>
+    </a>
+</div>
+
+{% else %}
+<div class="alert alert-info">
+    <p>Your shopping cart is empty.</p>
+    <a href="{% url 'store:product_list' %}" class="btn btn-primary mt-3">
+        <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+    </a>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Calculate cart total
+    document.addEventListener('DOMContentLoaded', function() {
+        // This is just a fallback in case the server doesn't provide the total
+        // The actual total should be calculated on the server side
+        let total = 0;
+        document.querySelectorAll('tbody tr').forEach(row => {
+            const subtotalText = row.querySelector('td:nth-child(4)').textContent;
+            const subtotal = parseFloat(subtotalText.replace('$', ''));
+            if (!isNaN(subtotal)) {
+                total += subtotal;
+            }
+        });
+
+        // Only update if we don't have a server-provided total
+        if (!document.querySelector('tfoot strong').textContent.includes('cart_total')) {
+            document.querySelector('tfoot strong').textContent = '$' + total.toFixed(2);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Error Page Testing{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Error Page Testing</h1>
+            <p class="lead">Click on the links below to test the custom error pages:</p>
+            
+            <div class="list-group mb-5">
+                <a href="{% url 'test_404' %}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    Test 404 Page Not Found
+                </a>
+                <a href="{% url 'test_500' %}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-exclamation-circle text-danger me-2"></i>
+                    Test 500 Server Error
+                </a>
+                <a href="{% url 'test_403' %}" class="list-group-item list-group-item-action">
+                    <i class="fas fa-lock text-secondary me-2"></i>
+                    Test 403 Access Denied
+                </a>
+            </div>
+            
+            <div class="alert alert-info">
+                <h4 class="alert-heading">How to test with DEBUG = False</h4>
+                <p>To test with DEBUG = False, make sure the local_settings.py file is not being imported or has DEBUG = False.</p>
+                <p>After testing, set DEBUG = True in local_settings.py for development.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

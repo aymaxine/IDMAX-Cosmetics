@@ -1,0 +1,397 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - IDMAX Customer Support{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="contact-header mb-5 text-center">
+    <h1 class="display-4 fw-bold">Contact Us</h1>
+    <p class="lead text-muted">We're here to help with your questions and concerns.</p>
+</div>
+
+<!-- Contact Information + Form Section -->
+<section class="contact-section mb-5">
+    <div class="row g-4">
+        <!-- Contact Information -->
+        <div class="col-lg-4">
+            <div class="contact-info-card h-100">
+                <h2>Get In Touch</h2>
+                <p class="mb-4">Have questions, feedback, or need assistance? Our customer service team is ready to help.</p>
+                
+                <div class="contact-method mb-4">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h5>Phone Support</h5>
+                        <p>(+233) 24-467-8080</p>
+                        <p class="text-muted small">Monday-Friday: 9AM-5PM BST</p>
+                    </div>
+                </div>
+                
+                <div class="contact-method mb-4">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h5>Email Support</h5>
+                        <p>idmaxhouse@gmail.com</p>
+                        <p class="text-muted small">We respond within 24 hours</p>
+                    </div>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h5>Office Location</h5>
+                        <p>66 Gusgirls St.<br>Suite 111<br>Aberdeenshire, Aberdeen City</p>
+                    </div>
+                </div>
+                
+                <div class="social-links mt-4">
+                    <h5>Connect With Us</h5>
+                    <div class="d-flex gap-2 mt-2">
+                        <a href="#" class="social-link" title="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Snapchat">
+                            <i class="fab fa-snapchat"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="col-lg-8">
+            <div class="contact-form-card h-100">
+                <h2>Let's Hear From You!</h2>
+                <p class="mb-4">Fill out the form below and we'll get back to you as soon as possible.</p>
+                
+                <form id="contactForm" class="needs-validation" novalidate>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                            <div class="invalid-feedback">
+                                Please provide your name.
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" required>
+                            <div class="invalid-feedback">
+                                Please provide a valid email.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" class="form-control" id="subject" required>
+                            <div class="invalid-feedback">
+                                Please provide a subject.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="orderNumber" class="form-label">Order Number (if applicable)</label>
+                            <input type="text" class="form-control" id="orderNumber">
+                        </div>
+                        <div class="col-12">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                            <div class="invalid-feedback">
+                                Please provide your message.
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="newsletter">
+                                <label class="form-check-label" for="newsletter">
+                                    Subscribe to our newsletter for updates and promotions
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-2"></i> Send Message
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="map-section mb-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>Find Us</h2>
+        </div>
+    </div>
+    <div class="map-container">
+        <div class="map-placeholder d-flex align-items-center justify-content-center">
+            <div class="text-center">
+                <i class="fas fa-map-marked-alt fa-4x mb-3"></i>
+                <h4>IDMAX HQ</h4>
+                <p>66 Gusgirls St., Aberdeenshire, Aberdeen</p>
+                <button class="btn btn-outline-primary" onclick="loadMap()">
+                    <i class="fas fa-map me-2"></i> Load Map
+                </button>
+            </div>
+        </div>
+        <div id="map" class="d-none"></div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section mb-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2>Frequently Asked Questions</h2>
+            <p class="text-muted">Quick answers to common questions</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div class="accordion" id="contactFAQ">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            How can I track my order?
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#contactFAQ">
+                        <div class="accordion-body">
+                            You can track your order by logging into your account and navigating to the 'Orders' section. Alternatively, you can use the tracking number provided in your shipping confirmation email.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            What is your return policy?
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#contactFAQ">
+                        <div class="accordion-body">
+                            We offer a 30-day return policy for most items. Products must be in original condition with tags attached and receipts provided. Certain categories like electronics and personal care items may have specific return conditions.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            How long does shipping take?
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#contactFAQ">
+                        <div class="accordion-body">
+                            Standard shipping typically takes 3-5 business days within the continental United States. Express shipping (1-2 business days) is available for an additional fee. International shipping times vary by location.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                            Do you offer international shipping?
+                        </button>
+                    </h2>
+                    <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#contactFAQ">
+                        <div class="accordion-body">
+                            Yes, we ship to most countries worldwide. International shipping rates and delivery times vary based on location. Import duties and taxes may apply depending on your country's regulations.
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                            How do I become a premium member?
+                        </button>
+                    </h2>
+                    <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#contactFAQ">
+                        <div class="accordion-body">
+                            Premium membership is available for a monthly or annual subscription fee. Sign up through your account settings page. Benefits include free express shipping, exclusive discounts, and early access to sales.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Styling for Contact page components -->
+<style>
+    /* Contact Info Card */
+    .contact-info-card,
+    .contact-form-card {
+        background: white;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        height: 100%;
+    }
+    
+    .contact-method {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .contact-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(0, 123, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--bs-primary);
+        flex-shrink: 0;
+    }
+    
+    .contact-details h5 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .contact-details p {
+        margin-bottom: 0;
+    }
+    
+    .social-link {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #495057;
+        transition: all 0.3s ease;
+    }
+    
+    .social-link:hover {
+        background: var(--bs-primary);
+        color: white;
+    }
+    
+    /* Form elements styling */
+    .form-control:focus {
+        box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        border-color: rgba(0, 123, 255, 0.5);
+    }
+    
+    /* Map container */
+    .map-container {
+        height: 400px;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .map-placeholder {
+        height: 100%;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        color: #495057;
+    }
+    
+    #map {
+        height: 100%;
+    }
+    
+    /* FAQ Styling */
+    .accordion-item {
+        border: none;
+        margin-bottom: 1rem;
+        border-radius: 0.5rem !important;
+        overflow: hidden;
+    }
+    
+    .accordion-button {
+        background-color: white;
+        border: none;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        font-weight: 600;
+        border-radius: 0.5rem !important;
+    }
+    
+    .accordion-button:not(.collapsed) {
+        color: var(--bs-primary);
+        background-color: rgba(0, 123, 255, 0.05);
+        box-shadow: none;
+    }
+    
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: transparent;
+    }
+    
+    .accordion-body {
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        background-color: white;
+    }
+</style>
+
+<!-- Form validation and map script -->
+<script>
+    // Form validation
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('contactForm');
+        
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                } else {
+                    event.preventDefault();
+                    // Simulate form submission
+                    const submitBtn = form.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...';
+                    submitBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        form.reset();
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                        
+                        // Show success message
+                        const formRow = form.querySelector('.row');
+                        const successAlert = document.createElement('div');
+                        successAlert.className = 'alert alert-success mt-3';
+                        successAlert.innerHTML = '<i class="fas fa-check-circle me-2"></i> Your message has been sent successfully! We\'ll get back to you soon.';
+                        formRow.appendChild(successAlert);
+                        
+                        // Remove alert after 5 seconds
+                        setTimeout(() => {
+                            successAlert.remove();
+                        }, 5000);
+                    }, 1500);
+                }
+                
+                form.classList.add('was-validated');
+            });
+        }
+    });
+    
+    // Map loading function (placeholder)
+    function loadMap() {
+        document.querySelector('.map-placeholder').classList.add('d-none');
+        document.getElementById('map').classList.remove('d-none');
+        document.getElementById('map').innerHTML = '<div class="ratio ratio-16x9"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.9663095343008!2d-74.0059418843508!3d40.74730337932881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1588204527335!5m2!1sen!2sus" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe></div>';
+    }
+</script>
+{% endblock %}

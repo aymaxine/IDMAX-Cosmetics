@@ -1,0 +1,343 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}IDMAX Cosmetics{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+    <!-- Add page background pattern -->
+    <style> 
+        .square{
+            aspect-ratio:1/1;
+            object-fit: cover
+        }
+        .custom-font{
+            font-family: Montserrat !important
+        }
+        .custom_img{
+            border-radius:50% !important;
+            width:90% !important;
+        }
+        .about-image-container{
+            padding:40px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        body {
+            background-color: #f8f9fa;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23007bff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .content-wrapper {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .main-container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .background-shape {
+            position: fixed;
+            width: 50vw;
+            height: 50vw;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.05;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .shape-1 {
+            background: linear-gradient(45deg, #007bff, #00c6ff);
+            top: -20%;
+            right: -20%;
+        }
+        
+        .shape-2 {
+            background: linear-gradient(45deg, #11998e, #38ef7d);
+            bottom: -20%;
+            left: -20%;
+        }
+    </style>
+</head>
+<body>
+<!-- Preloader -->
+<div class="preloader" id="preloader">
+    <div class="spinner"></div>
+</div>
+
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand" href="{% url 'store:home' %}">
+            <img class="rounded-circle" src="{% static 'img/idmaxlogo.png' %}" alt="IDMAX Logo" height="40">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'store:home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'store:product_list' %}">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'store:about' %}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'store:contact' %}">Contact</a>
+                </li>
+            </ul>
+            <form class="d-flex me-2 my-2 my-lg-0 order-lg-1" action="{% url 'store:product_list' %}" method="get">
+                <div class="input-group">
+                    <input class="form-control" type="search" placeholder="Search products..." name="q"
+                           aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">
+                        <i class="fas fa-search d-lg-none"></i>
+                        <span class="d-none d-lg-inline">Search</span>
+                    </button>
+                </div>
+            </form>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link cart-icon" href="{% url 'store:wishlist_detail' %}" title="Wishlist">
+                        <i class="fas fa-heart"></i>
+                        {% if wishlist_items_count %}
+                        <span class="cart-count">{{ wishlist_items_count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link cart-icon" href="{% url 'store:comparison_list' %}" title="Compare">
+                        <i class="fas fa-exchange-alt"></i>
+                        {% if comparison_items_count %}
+                        <span class="cart-count">{{ comparison_items_count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link cart-icon" href="{% url 'store:cart_detail' %}">
+                        <i class="fas fa-shopping-cart"></i>
+                        {% if cart_items_count %}
+                        <span class="cart-count">{{ cart_items_count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-capitalize" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown">
+                        {{ user.username }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'profile' %}">My Profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'store:order_list' %}">My Orders</a></li>
+                        {% if user.is_staff %}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{% url 'store:admin_dashboard' %}">Admin Dashboard</a></li>
+                        {% endif %}
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="dropdown-item">Logout</button>
+                            </form>
+                        </li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Messages -->
+<div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm rounded" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Background shapes -->
+<div class="background-shape shape-1"></div>
+<div class="background-shape shape-2"></div>
+
+<!-- Main Content -->
+<div class="main-container">
+    <div class="content-wrapper">
+        <main class="container-fluid py-4 flex-grow-1">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer mt-auto py-3">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-12 col-sm-6 col-md-4">
+                <div class="mb-3">
+                    {% comment %} <img src="{% static 'img/idmax logo.png' %}" alt="IDMAX Logo" height="40"> {% endcomment %}
+                    <strong>IDMAX Cosmetics</strong>
+                </div>
+                <p>Your one-stop shop for all your cosmetic needs.</p>
+            </div>
+            <div class="col-6 col-sm-6 col-md-4">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'store:home' %}" class="d-inline-block py-1">Home</a></li>
+                    <li><a href="{% url 'store:product_list' %}" class="d-inline-block py-1">Products</a></li>
+                    <li><a href="{% url 'store:about' %}" class="d-inline-block py-1">About Us</a></li>
+                    <li><a href="{% url 'store:contact' %}" class="d-inline-block py-1">Contact Us</a></li>
+                    <li><a href="{% url 'store:comparison_list' %}" class="d-inline-block py-1">Compare</a></li>
+                    <li><a href="{% url 'store:cart_detail' %}" class="d-inline-block py-1">Cart</a></li>
+                </ul>
+            </div>
+            <div class="col-12 col-sm-12 col-md-4">
+                <h5>Contact Us</h5>
+                <address>
+                    <strong>IDMAX Cosmetics</strong><br>
+                    66 Gusgirls St.<br>
+                    Aberdeenshire, Aberdeen City<br>
+                    <div class="mt-2">
+                        <i class="fas fa-envelope"></i> <a href="mailto:idmaxhouse@gmail.com" class="d-inline-block py-1">idmaxhouse@gmail.com</a><br>
+                        <i class="fas fa-phone"></i> <span class="d-inline-block py-1">(+233) 24-467-8080</span>
+                    </div>
+                </address>
+            </div>
+        </div>
+        <hr>
+        <div class="text-center">
+            <p>&copy; {% now "Y" %} IDMAX Cosmetics - E-Commerce Store. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Theme and Preloader JavaScript -->
+<script>
+        
+    
+    // Preloader and Page Transition JavaScript
+    // Hide preloader when page is fully loaded
+    $(window).on('load', function () {
+        $('#preloader').fadeOut(500);
+        // Animate main content
+        $('main.container-fluid').css('opacity', 0);
+        setTimeout(function () {
+            $('main.container-fluid').css('transition', 'opacity 0.5s ease-in-out');
+            $('main.container-fluid').css('opacity', 1);
+        }, 100);
+    });
+
+    // Also hide preloader on pageshow event (fires when navigating using browser history)
+    $(window).on('pageshow', function (event) {
+        // If the page is loaded from the cache (browser back/forward button)
+        if (event.originalEvent.persisted) {
+            $('#preloader').fadeOut(500);
+            // Animate main content
+            $('main.container-fluid').css('opacity', 0);
+            setTimeout(function () {
+                $('main.container-fluid').css('transition', 'opacity 0.5s ease-in-out');
+                $('main.container-fluid').css('opacity', 1);
+            }, 100);
+        }
+    });
+
+    // Show preloader when navigating away or reloading
+    $(document).ready(function () {
+        // Add transition class to main content
+        $('main.container-fluid').addClass('page-transition');
+
+        $(window).on('beforeunload', function () {
+            $('#preloader').fadeIn(0);
+        });
+
+        // For internal links, show preloader and animate content out
+        $('a').on('click', function (e) {
+            // Don't show preloader for links that open in new tabs/windows or for dropdown toggles
+            if (!$(this).attr('target') &&
+                !$(this).attr('href').startsWith('#') &&
+                !$(this).attr('href').startsWith('javascript:') &&
+                !$(this).hasClass('dropdown-toggle')) {
+                e.preventDefault();
+                var href = $(this).attr('href');
+
+                // Fade out content
+                $('main.container-fluid').css('opacity', 0);
+
+                // Show preloader
+                $('#preloader').fadeIn(300);
+
+                // Navigate after short delay
+                setTimeout(function () {
+                    window.location.href = href;
+                }, 300);
+            }
+        });
+
+        // For form submissions, show preloader and animate content out
+        $('form').on('submit', function (e) {
+            if (!$(this).hasClass('no-transition')) {
+                e.preventDefault();
+                var form = $(this);
+
+                // Fade out content
+                $('main.container-fluid').css('opacity', 0);
+
+                // Show preloader
+                $('#preloader').fadeIn(300);
+
+                // Submit form after short delay
+                setTimeout(function () {
+                    form.addClass('no-transition');
+                    form.submit();
+                }, 300);
+            }
+        });
+
+    });
+</script>
+
+{% block extra_js %}{% endblock %}
+</body>
+</html>

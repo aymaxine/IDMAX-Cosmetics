@@ -1,0 +1,153 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Order #{{ order.id }} - IDMAX Cosmetics{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'store:order_list' %}">My Orders</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Order #{{ order.id }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Order #{{ order.id }}</h5>
+                <span class="badge {% if order.status == 'delivered' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% else %}bg-warning{% endif %}">
+                    {{ order.get_status_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6>Order Information</h6>
+                        <p class="mb-1"><strong>Order Date:</strong> {{ order.created_at|date:"F j, Y, g:i a" }}</p>
+                        <p class="mb-1"><strong>Order Status:</strong> {{ order.get_status_display }}</p>
+                        <p class="mb-1"><strong>Total Amount:</strong> ${{ order.total_price|floatformat:2 }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Shipping Information</h6>
+                        <p class="mb-1">{{ order.first_name }} {{ order.last_name }}</p>
+                        <p class="mb-1">{{ order.address }}</p>
+                        <p class="mb-1">{{ order.city }}, {{ order.postal_code }}</p>
+                        <p class="mb-1">{{ order.country }}</p>
+                        <p class="mb-1">{{ order.phone }}</p>
+                        <p class="mb-1">{{ order.email }}</p>
+                    </div>
+                </div>
+
+                <h6>Order Items</h6>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th class="text-end">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order.items.all %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-thumbnail me-3" style="width: 50px; height: 50px; object-fit: cover;">
+                                        {% else %}
+                                        <div class="bg-light text-center me-3" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
+                                            <i class="fas fa-image text-muted"></i>
+                                        </div>
+                                        {% endif %}
+                                        <div>
+                                            <h6 class="mb-0">{{ item.product.name }}</h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>${{ item.price|floatformat:2 }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td class="text-end">${{ item.get_cost|floatformat:2 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-light">
+                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                <td class="text-end"><strong>${{ order.total_price|floatformat:2 }}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                {% if order.notes %}
+                <div class="mt-4">
+                    <h6>Order Notes</h6>
+                    <p>{{ order.notes }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'store:order_list' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-list me-2"></i>Back to My Orders
+                    </a>
+                    <a href="{% url 'store:product_list' %}" class="btn btn-primary">
+                        <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+                    </a>
+                    {% if order.status == 'pending' %}
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelOrderModal">
+                        <i class="fas fa-times me-2"></i>Cancel Order
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Need Help?</h5>
+            </div>
+            <div class="card-body">
+                <p>If you have any questions about your order, please contact our customer service:</p>
+                <p><i class="fas fa-envelope me-2"></i><a href="mailto:idmaxhouse@gmail.com">idmaxhouse@gmail.com</a></p>
+                <p><i class="fas fa-phone me-2"></i>(+233) 24-467-8080</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Order Modal -->
+{% if order.status == 'pending' %}
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelOrderModalLabel">Cancel Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to cancel this order? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <form action="{% url 'store:order_cancel' order.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Cancel Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

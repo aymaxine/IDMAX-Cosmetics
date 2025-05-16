@@ -1,0 +1,143 @@
+{% extends 'store/base.html' %}
+{% load custom_filters %}
+
+{% block title %}Product Comparison - IDMAX Cosmetics{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Product Comparison</h1>
+
+    {% if not products %}
+    <div class="alert alert-info">
+        <p>Your comparison list is empty. Browse products and add them to compare.</p>
+        <a href="{% url 'store:product_list' %}" class="btn btn-primary">Browse Products</a>
+    </div>
+    {% else %}
+    <div class="mb-3">
+        <a href="{% url 'store:comparison_clear' %}" class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to clear your comparison list?')">
+            <i class="fas fa-trash-alt me-2"></i>Clear Comparison
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered comparison-table">
+            <thead>
+                <tr>
+                    <th style="width: 15%">Product</th>
+                    {% for product in products %}
+                    <th class="text-center">
+                        <div class="d-flex flex-column align-items-center">
+                            <a href="{% url 'store:product_detail' product.id %}">
+                                {% if product.image %}
+                                <img src="/media/product_images/{{ product.image|cut:'product_images/' }}" alt="{{ product.name }}" class="img-fluid mb-2" style="max-height: 100px;">
+                                {% else %}
+                                <div class="no-image mb-2" style="width: 100px; height: 100px; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                                    <span class="text-muted">No image</span>
+                                </div>
+                                {% endif %}
+                                <h5>{{ product.name }}</h5>
+                            </a>
+                            <a href="{% url 'store:comparison_remove' product.id %}" class="btn btn-sm btn-outline-danger mt-2">
+                                <i class="fas fa-times me-1"></i>Remove
+                            </a>
+                        </div>
+                    </th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Product attributes -->
+                {% for attr_name, attr_values in attributes.items %}
+                <tr>
+                    <th>{{ attr_name }}</th>
+                    {% for product in products %}
+                    <td class="text-center">
+                        {% if attr_name == 'Rating' %}
+                            <div class="d-flex justify-content-center align-items-center">
+                                <span class="me-2">{{ attr_values|dictget:product.id }}</span>
+                                <div>
+                                    {% with rating=attr_values|dictget:product.id|floatformat:1|slice:":3"|add:"0" %}
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= rating|floatformat:0|add:"0" %}
+                                                <i class="fas fa-star text-warning"></i>
+                                            {% elif forloop.counter <= rating|add:"0.5"|floatformat:0|add:"0" %}
+                                                <i class="fas fa-star-half-alt text-warning"></i>
+                                            {% else %}
+                                                <i class="far fa-star text-muted"></i>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endwith %}
+                                </div>
+                            </div>
+                        {% else %}
+                            {{ attr_values|dictget:product.id }}
+                        {% endif %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+
+                <!-- Description -->
+                <tr>
+                    <th>Description</th>
+                    {% for product in products %}
+                    <td>
+                        <div style="max-height: 150px; overflow-y: auto;">
+                            {{ product.description|truncatewords:50 }}
+                        </div>
+                    </td>
+                    {% endfor %}
+                </tr>
+
+                <!-- Actions -->
+                <tr>
+                    <th>Actions</th>
+                    {% for product in products %}
+                    <td class="text-center">
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'store:product_detail' product.id %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-info-circle me-1"></i>Details
+                            </a>
+                            <form method="post" action="{% url 'store:cart_add' product.id %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn btn-sm btn-success w-100">
+                                    <i class="fas fa-cart-plus me-1"></i>Add to Cart
+                                </button>
+                            </form>
+                            <a href="{% url 'store:wishlist_add' product.id %}?next={{ request.path }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-heart me-1"></i>Add to Wishlist
+                            </a>
+                        </div>
+                    </td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Custom template filter for dictionary access
+    if (!window.django) {
+        window.django = {};
+    }
+    if (!window.django.templatetags) {
+        window.django.templatetags = {};
+    }
+    window.django.templatetags.get_item = function(dict, key) {
+        return dict[key];
+    };
+
+    $(document).ready(function() {
+        // Initialize any rating bars if needed
+        $('.rating-bar').each(function() {
+            var percentage = $(this).data('percentage');
+            $(this).css('width', percentage + '%');
+        });
+    });
+</script>
+{% endblock %}

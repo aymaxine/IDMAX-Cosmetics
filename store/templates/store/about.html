@@ -1,0 +1,589 @@
+{% extends 'store/base.html' %}
+{% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Domine:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+{% block title %}About IDMAX Cosmetics - Our Story, Mission & Values{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="about-header mb-5 text-center">
+    <h1 class="display-4 fw-bold">About IDMAX Cosmetics</h1>
+    <p class="lead text-muted">Bringing you quality products since 2016</p>
+</div>
+
+<!-- Company Overview -->
+<section class="company-overview mb-5">
+    <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="about-image-container">
+                <img src="{% static 'img/idmaxlogo.png' %}" alt="IDMAX Company" class="img-fluid rounded shadow custom_img">
+            </div>
+        </div>
+        <div class="col-lg-6 custom-font text-center px-5">
+            <h2>Our Story</h2>
+            <p>IDMAX House, the umbrella company, began with a heartfelt vision: to create a shopping destination where quality meets purpose, and self-care becomes a celebration of identity.</p>
+            <p>Founded on September 15, 2016, by a devoted mother inspired by her five children — four radiant daughters and one spirited son — IDMAX Cosmetics was born out of love and a deep desire to nurture confidence. Witnessing the beauty and uniqueness of her children's skin, she wanted to instill in them a sense of pride, care, and self-worth through products that encourage people to embrace and invest in their natural beauty.</p>
+            <p>What started as a passion project in a family home has grown into a trusted online brand, cherished by customers around the world. Every product we offer is curated with intention — to reflect our commitment to quality, inclusivity, and confidence-building care. We've come a long way, but our mission remains the same: to celebrate individuality and empower every customer to feel seen, valued, and beautiful in their own skin.</p>
+            <p>With an ever-expanding catalog and thousands of happy customers, IDMAX Cosmetics continues to thrive on its core values: integrity, innovation, and heartfelt service. This is more than shopping — it's a journey of self-love, one order at a time.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Mission and Values -->
+<section class="mission-values mb-5 py-5 bg-light rounded">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2>Our Mission & Values</h2>
+            <p class="text-muted">Principles that guide everything we do</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="value-card h-100">
+                <div class="value-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3>Quality</h3>
+                <p>We carefully curate our products to ensure they meet the highest standards of quality and durability. Each item in our catalog undergoes thorough testing and verification before reaching our customers.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="value-card h-100">
+                <div class="value-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3>Customer Focus</h3>
+                <p>Our customers are at the heart of everything we do. We constantly listen to feedback and strive to improve our services, products, and user experience to exceed customer expectations.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="value-card h-100">
+                <div class="value-icon">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3>Sustainability</h3>
+                <p>We're committed to reducing our environmental footprint through eco-friendly packaging, sustainable sourcing practices, and partnerships with environmentally conscious suppliers and manufacturers.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Company Timeline -->
+<section class="company-timeline mb-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2>Our Journey</h2>
+            <p class="text-muted">Key milestones in our growth</p>
+        </div>
+    </div>
+    
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>2016</h3>
+                <p>IDMAX Cosmetics is founded with a small selection of products and a big vision.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>2018</h3>
+                <p>Reached our first 1,000 customers and expanded our product catalog to include 10+ categories.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>2022</h3>
+                <p>Launched our premium membership program and introduced 24/7 customer support.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>2023</h3>
+                <p>Expanded operations to include international shipping and partnered with 50+ new brands.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>2024</h3>
+                <p>Redesigned our website platform for enhanced user experience and faster performance.</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <h3>2025</h3>
+                <p>Celebrating our 9th anniversary with over 100,000 happy customers worldwide!</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="team-section mb-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2>Meet Our Team</h2>
+            <p class="text-muted">The people behind IDMAX Cosmetics</p>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="team-card">
+                <div class="team-image">
+                    <div class="">
+                        <img src="{% static 'img/mavis.jpg' %}" alt="IDMAX Company" class="img-fluid rounded shadow">  
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h4>Mavis Agy</h4>
+                    <p class="team-position">CEO & Founder</p>
+                    <p class="team-bio">With over 15 years of experience in entrepreneurship, specifically retail and e-commerce, Mavis founded IDMAX Cosmetics, under IDMAX House, with a vision to revolutionize online shopping.</p>
+                    <div class="team-social">
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="team-card">
+                <div class="team-image">
+                    <div class="">
+                        <img src="{% static 'img/dawn.jpg' %}" alt="IDMAX Company" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h4>Dawn Agy</h4>
+                    <p class="team-position">Chief Product Officer</p>
+                    <p class="team-bio">Dawn leads our product strategy and curation, ensuring that we offer only the best quality merchandise to our customers.</p>
+                    <div class="team-social">
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="team-card">
+                <div class="team-image">
+                    <div class="">
+                        <img src="{% static 'img/maxinenana.jpg' %}" alt="IDMAX Company" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h4>Maxine Agy</h4>
+                    <p class="team-position">CTO</p>
+                    <p class="team-bio">Maxine oversees our technical operations, ensuring a seamless and secure online shopping experience for our users.</p>
+                    <div class="team-social">
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="team-card">
+                <div class="team-image">
+                    <div class="">
+                        <img src="{% static 'img/irispic.png' %}" alt="IDMAX Company" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h4>Iris Agy</h4>
+                    <p class="team-position">Customer Experience Manager</p>
+                    <p class="team-bio">Iris leads our customer service team, dedicated to providing exceptional support and assistance to all IDMAX shoppers.</p>
+                    <div class="team-social">
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials-section mb-5 py-5 bg-light rounded">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2>What Our Customers Say</h2>
+            <p class="text-muted">Hear from people who love shopping with us</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-12">
+            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <p>"IDMAX has become my go-to online store for all my shopping needs. Their product quality and customer service are unmatched!"</p>
+                                <div class="testimonial-author">
+                                    <h5>Princess Marie</h5>
+                                    <p>Loyal customer since 2021</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <p>"I'm impressed with how quickly my orders arrive and the attention to detail in packaging. IDMAX truly cares about customer satisfaction."</p>
+                                <div class="testimonial-author">
+                                    <h5>Osmond Q.</h5>
+                                    <p>Premium Member</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="testimonial-card">
+                            <div class="testimonial-content">
+                                <p>"The product selection at IDMAX is incredible, and the website makes finding exactly what I need so easy. Highly recommend!"</p>
+                                <div class="testimonial-author">
+                                    <h5>Elizabeth A.</h5>
+                                    <p>Repeat Customer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <button class="carousel-control-btn me-2" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-control-btn" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta-section mb-5">
+    <div class="cta-card text-center">
+        <h2>Ready to Experience IDMAX Cosmetics?</h2>
+        <p class="lead mb-4">Join thousands of satisfied customers who choose us daily for their online cosmetic shopping needs.</p>
+        <div class="d-flex gap-3 justify-content-center">
+            <a href="{% url 'store:product_list' %}" class="btn btn-primary btn-lg">Shop Now</a>
+            <a href="{% url 'store:contact' %}" class="btn btn-outline-primary btn-lg">Contact Us</a>
+        </div>
+    </div>
+</section>
+
+<!-- Styling for About page components -->
+<style>
+    /* Company Overview Section */
+    .about-image-container {
+        position: relative;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+    
+    .about-image-container:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, rgba(0, 123, 255, 0.2) 0%, rgba(0, 123, 255, 0) 100%);
+        z-index: 1;
+    }
+    
+    /* Mission and Values Section */
+    .value-card {
+        background: white;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    
+    .value-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .value-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(0, 123, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        color: var(--bs-primary);
+    }
+    
+    /* Timeline Section */
+    .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+    
+    .timeline:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        width: 3px;
+        background: #e9ecef;
+        transform: translateX(-50%);
+    }
+    
+    .timeline-item {
+        position: relative;
+        width: 50%;
+        margin-bottom: 3rem;
+        padding-right: 2rem;
+    }
+    
+    .timeline-item:nth-child(even) {
+        margin-left: 50%;
+        padding-right: 0;
+        padding-left: 2rem;
+    }
+    
+    .timeline-dot {
+        position: absolute;
+        top: 0;
+        right: -10px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: var(--bs-primary);
+        border: 4px solid white;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    }
+    
+    .timeline-item:nth-child(even) .timeline-dot {
+        right: auto;
+        left: -10px;
+    }
+    
+    .timeline-content {
+        background: white;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .timeline-content h3 {
+        font-weight: 600;
+        color: var(--bs-primary);
+        margin-bottom: 0.5rem;
+    }
+    
+    .timeline-content p {
+        margin-bottom: 0;
+    }
+    
+    /* Team Section */
+    .team-card {
+        background: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .team-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .team-image {
+        height: 250px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .team-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: #adb5bd;
+    }
+    
+    .team-info {
+        padding: 1.5rem;
+    }
+    
+    .team-position {
+        color: var(--bs-primary);
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+    
+    .team-bio {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 1rem;
+    }
+    
+    .team-social {
+        display: flex;
+        gap: 0.5rem;
+    }
+    
+    .social-icon {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #495057;
+        transition: all 0.3s ease;
+    }
+    
+    .social-icon:hover {
+        background: var(--bs-primary);
+        color: white;
+    }
+    
+    /* Testimonials Section */
+    .testimonial-card {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    
+    .testimonial-content {
+        background: white;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        position: relative;
+    }
+    
+    .testimonial-content:before {
+        content: "\201C";
+        position: absolute;
+        top: 5px;
+        left: 15px;
+        font-size: 5rem;
+        color: rgba(0, 123, 255, 0.1);
+        font-family: serif;
+        line-height: 1;
+    }
+    
+    .testimonial-content p {
+        font-style: italic;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .testimonial-author h5 {
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+    
+    .testimonial-author p {
+        font-style: normal;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    
+    .carousel-control-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: white;
+        border: 1px solid #dee2e6;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: #495057;
+        transition: all 0.3s ease;
+    }
+    
+    .carousel-control-btn:hover {
+        background: var(--bs-primary);
+        color: white;
+        border-color: var(--bs-primary);
+    }
+    
+    /* Call to Action Section */
+    .cta-card {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        color: white;
+        border-radius: 0.5rem;
+        padding: 3rem 2rem;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .cta-card:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        opacity: 0.3;
+    }
+    
+    .cta-card h2,
+    .cta-card p {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .cta-card .btn-outline-primary {
+        color: white;
+        border-color: white;
+    }
+    
+    .cta-card .btn-outline-primary:hover {
+        background-color: white;
+        color: #6a11cb;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 767.98px) {
+        /* Timeline mobile adjustments */
+        .timeline:before {
+            left: 30px;
+        }
+        
+        .timeline-item,
+        .timeline-item:nth-child(even) {
+            width: 100%;
+            margin-left: 0;
+            padding-left: 60px;
+            padding-right: 0;
+        }
+        
+        .timeline-dot,
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: 30px;
+            right: auto;
+        }
+    }
+</style>
+{% endblock %}

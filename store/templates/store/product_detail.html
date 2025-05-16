@@ -1,0 +1,756 @@
+{% extends 'store/base.html' %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}{{ product.name }} - IDMAX Cosmetics{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Product Gallery Styling */
+    .product-gallery-main {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    
+    .product-detail-img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        background-color: #fff;
+        transition: transform 0.3s ease;
+    }
+    
+    .product-zoom-overlay {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255,255,255,0.8);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+    }
+    
+    .product-zoom-overlay:hover {
+        opacity: 1;
+    }
+    
+    .product-gallery-thumbs {
+        margin-top: 15px;
+    }
+    
+    .thumbnail-item {
+        cursor: pointer;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        transition: all 0.2s ease;
+    }
+    
+    .thumbnail-item.active {
+        border-color: var(--bs-primary);
+    }
+    
+    .thumbnail-item:hover {
+        transform: translateY(-3px);
+    }
+    
+    .thumbnail-item img {
+        width: 100%;
+        height: 70px;
+        object-fit: cover;
+    }
+    
+    .thumbnail-placeholder {
+        width: 100%;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+    }
+    
+    /* Exclusive Features Styling */
+    .exclusive-features {
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 15px;
+        background-color: #f8f9fa;
+    }
+    
+    .exclusive-features h5 {
+        margin-bottom: 15px;
+        color: #495057;
+    }
+    
+    .exclusive-features-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .exclusive-feature-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .exclusive-feature-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+    
+    /* Enhanced Premium & Exclusive Features */
+    .product-premium-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 10;
+        background: linear-gradient(45deg, #FFD700, #FFA500);
+        color: #212529;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        letter-spacing: 0.5px;
+        animation: badgeShine 2s infinite linear;
+    }
+    
+    .product-premium-badge i {
+        color: #212529;
+    }
+    
+    @keyframes badgeShine {
+        0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+        50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+    }
+    
+    .product-limited-edition {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        z-index: 10;
+        background: linear-gradient(45deg, #212529, #495057);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        letter-spacing: 0.5px;
+    }
+    
+    .product-price-info.premium-price {
+        position: relative;
+        background: linear-gradient(90deg, rgba(255,228,196,0.3), rgba(255,215,0,0.1));
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #FFD700;
+    }
+    
+    .product-price-info.discount-price {
+        position: relative;
+        background: linear-gradient(90deg, rgba(255,240,240,0.5), rgba(255,220,220,0.2));
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #dc3545;
+    }
+    
+    .discount-badge {
+        position: absolute;
+        top: -10px;
+        right: 10px;
+        background: #dc3545;
+        color: white;
+        padding: 3px 10px;
+        border-radius: 15px;
+        font-weight: bold;
+        font-size: 0.85rem;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+    
+    .free-shipping-badge {
+        display: inline-flex;
+        align-items: center;
+        background: linear-gradient(90deg, #28a745, #20c997);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-top: 10px;
+        box-shadow: 0 3px 6px rgba(40,167,69,0.2);
+        gap: 6px;
+    }
+    
+    .free-shipping-badge i {
+        animation: truckMove 2s infinite ease-in-out;
+    }
+    
+    @keyframes truckMove {
+        0% { transform: translateX(0); }
+        50% { transform: translateX(3px); }
+        100% { transform: translateX(0); }
+    }
+    
+    .product-spotlight {
+        margin-top: 25px;
+        padding: 20px;
+        border-radius: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .product-spotlight.premium {
+        background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,228,196,0.2) 100%);
+        border: 1px solid rgba(255,215,0,0.3);
+    }
+    
+    .product-spotlight.limited-edition {
+        background: linear-gradient(135deg, rgba(33,37,41,0.05) 0%, rgba(73,80,87,0.1) 100%);
+        border: 1px solid rgba(33,37,41,0.2);
+    }
+    
+    .product-spotlight h4 {
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .product-spotlight.premium h4 {
+        color: #b8860b;
+    }
+    
+    .product-spotlight.limited-edition h4 {
+        color: #343a40;
+    }
+    
+    .product-spotlight p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    .product-spotlight.premium::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 70%);
+        opacity: 0.7;
+    }
+    
+    /* For the image zoom modal */
+    #imageModal .modal-content {
+        background-color: transparent;
+        border: none;
+    }
+    
+    #imageModal .modal-body {
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    #zoomedImage {
+        max-width: 100%;
+        max-height: 80vh;
+    }
+    
+    .modal-close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: rgba(255,255,255,0.8);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border: none;
+        z-index: 1050;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb flex-nowrap overflow-auto" style="white-space: nowrap; -webkit-overflow-scrolling: touch;">
+        <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'store:product_list' %}">Products</a></li>
+        {% if product.category %}
+        <li class="breadcrumb-item"><a href="{% url 'store:product_list' %}?category={{ product.category.id }}">{{ product.category.name }}</a></li>
+        {% endif %}
+        <li class="breadcrumb-item text-truncate active" aria-current="page" style="max-width: 200px;">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="row">
+    <!-- Product Images -->
+    <div class="col-md-6 mb-4">
+        <div class="product-gallery">
+            <!-- Main Product Image -->
+            <div class="product-gallery-main mb-3">
+                {% if product.image and product.image != 'default.jpg' %}
+                <img src="/media/product_images/{{ product.image|cut:'product_images/' }}" class="img-fluid product-detail-img" alt="{{ product.name }}" id="mainProductImage">
+                {% else %}
+                <div class="product-detail-placeholder bg-light text-center py-5">
+                    <i class="fas fa-image fa-5x text-muted"></i>
+                </div>
+                {% endif %}
+                
+                <!-- Exclusive Feature Badges -->
+                {% if product.is_premium %}
+                <div class="product-premium-badge">
+                    <i class="fas fa-crown"></i> Premium
+                </div>
+                {% elif product.limited_edition %}
+                <div class="product-limited-edition">
+                    <i class="fas fa-gem"></i> Limited Edition
+                </div>
+                {% endif %}
+                
+                <!-- Zoom overlay -->
+                <div class="product-zoom-overlay">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            </div>
+            
+            <!-- Thumbnail Images -->
+        </div>
+    </div>
+
+    <!-- Product Details -->
+    <div class="col-md-6">
+        <h1 class="mb-3 text-capitalize">{{ product.name }}</h1>
+        <p class="text-muted mb-3">Category: {% if product.category %}{{ product.category.name }}{% else %}Uncategorized{% endif %}</p>
+
+        <!-- Price and Stock Information -->
+        <div class="product-price-info mb-3 {% if product.is_premium %}premium-price{% elif product.discount_percentage > 0 %}discount-price{% endif %}">
+            {% if product.discount_percentage > 0 %}
+                <div class="discount-badge">{{ product.discount_percentage }}% OFF</div>
+                <div class="d-flex align-items-center gap-2">
+                    <h3 class="text-success mb-0">${{ product.get_discounted_price|floatformat:2 }}</h3>
+                    <del class="text-muted">${{ product.price|floatformat:2 }}</del>
+                </div>
+            {% else %}
+                <h3 class="{% if product.is_premium %}text-warning{% else %}text-primary{% endif %} mb-0">${{ product.price|floatformat:2 }}</h3>
+            {% endif %}
+            
+            <div class="mt-2 d-flex flex-wrap gap-2 align-items-center">
+                {% if product.stock > 0 %}
+                <span class="badge bg-success">In Stock ({{ product.stock }} available)</span>
+                {% else %}
+                <span class="badge bg-danger">Out of Stock</span>
+                {% endif %}
+                
+                {% if product.has_free_shipping %}
+                <div class="free-shipping-badge">
+                    <i class="fas fa-truck"></i> Free Shipping
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Exclusive Features -->
+        {% if product.get_exclusive_features %}
+        <div class="exclusive-features mb-4">
+            <h5>Exclusive Features</h5>
+            <div class="exclusive-features-list">
+                {% if product.is_premium %}
+                <div class="exclusive-feature-item">
+                    <i class="fas fa-crown text-warning"></i>
+                    <span>Premium Product</span>
+                </div>
+                {% endif %}
+                
+                {% if product.has_free_shipping %}
+                <div class="exclusive-feature-item">
+                    <i class="fas fa-truck text-success"></i>
+                    <span>Free Shipping</span>
+                </div>
+                {% endif %}
+                
+                {% if product.limited_edition %}
+                <div class="exclusive-feature-item">
+                    <i class="fas fa-gem text-primary"></i>
+                    <span>Limited Edition</span>
+                </div>
+                {% endif %}
+                
+                {% if product.discount_percentage > 0 %}
+                <div class="exclusive-feature-item">
+                    <i class="fas fa-tags text-danger"></i>
+                    <span>{{ product.discount_percentage }}% Discount</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="mb-4">
+            <h5>Description</h5>
+            <p>{{ product.description|linebreaks }}</p>
+        </div>
+
+        {% if previous_version %}
+        <div class="card mb-4 border-info">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Previous Version</h5>
+                <small>Before last edit on {{ product.updated_at|date:"F j, Y, g:i a" }}</small>
+            </div>
+            <div class="card-body">
+                <h6>Name: {{ previous_version.name }}</h6>
+                <p><strong>Price:</strong> ${{ previous_version.price }}</p>
+                <p><strong>Category:</strong> {{ previous_version.category_name }}</p>
+                <p><strong>Stock:</strong> {{ previous_version.stock }}</p>
+                <p><strong>Description:</strong></p>
+                <p>{{ previous_version.description|linebreaks }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if product.stock > 0 %}
+        <form action="{% url 'store:cart_add' product.id %}" method="post" class="mb-4">
+            {% csrf_token %}
+            <div class="row g-3 align-items-center">
+                <div class="col-12 col-sm-auto mb-2 mb-sm-0">
+                    <label for="id_quantity" class="col-form-label">Quantity:</label>
+                </div>
+                <div class="col-6 col-sm-auto mb-2 mb-sm-0">
+                    {{ cart_product_form.quantity }}
+                </div>
+                <div class="col-12 col-sm-auto">
+                    <button type="submit" class="btn btn-primary w-100 w-sm-auto">
+                        <i class="fas fa-cart-plus me-2"></i>Add to Cart
+                    </button>
+                </div>
+            </div>
+        </form>
+        {% endif %}
+
+        <div class="d-grid gap-2 d-md-flex">
+            <a href="{% url 'store:product_list' %}" class="btn btn-outline-secondary mb-2 mb-md-0">
+                <i class="fas fa-arrow-left me-2"></i><span class="d-none d-sm-inline">Continue Shopping</span><span
+                    class="d-inline d-sm-none">Back</span>
+            </a>
+            <a href="{% url 'store:wishlist_add' product.id %}?next={{ request.path }}"
+               class="btn btn-outline-danger mb-2 mb-md-0">
+                <i class="fas fa-heart me-2"></i><span class="d-none d-sm-inline">Add to Wishlist</span><span
+                    class="d-inline d-sm-none">Wishlist</span>
+            </a>
+            <a href="{% url 'store:comparison_add' product.id %}?next={{ request.path }}"
+               class="btn btn-outline-info mb-2 mb-md-0">
+                <i class="fas fa-balance-scale me-2"></i><span class="d-none d-sm-inline">Compare</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Premium Product Spotlight -->
+{% if product.is_premium %}
+<section class="product-spotlight premium">
+    <h4><i class="fas fa-crown text-warning"></i> Premium Product Spotlight</h4>
+    <p>Experience luxury with this premium product. Our premium selection represents the pinnacle of quality and craftsmanship, offering you an exceptional experience that stands above the rest. Indulge in superior materials, exquisite design, and outstanding performance.</p>
+    {% if product.has_free_shipping %}
+    <p><i class="fas fa-check-circle text-success"></i> Includes complimentary express shipping to get your premium product to you faster.</p>
+    {% endif %}
+</section>
+{% endif %}
+
+<!-- Limited Edition Spotlight -->
+{% if product.limited_edition %}
+<section class="product-spotlight limited-edition">
+    <h4><i class="fas fa-gem text-secondary"></i> Limited Edition Collection</h4>
+    <p>This product is part of our exclusive limited edition collection, available only while supplies last. Each item is specially crafted in limited quantities, making it a unique addition to your collection.</p>
+    <p><i class="fas fa-exclamation-circle text-danger"></i> <strong>Limited availability</strong> - Only {{ product.stock }} units remaining!</p>
+</section>
+{% endif %}
+
+<!-- Rating Summary -->
+{% if rating_count > 0 %}
+<section class="mt-5">
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h3 class="mb-0">Rating Summary</h3>
+        </div>
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <div class="display-4 fw-bold text-primary">{{ rating_avg|floatformat:1 }}</div>
+                    <div class="mb-2">
+                        {% for i in "12345" %}
+                        {% if forloop.counter <= rating_avg|floatformat:0|add:"0" %}
+                        <i class="fas fa-star text-warning"></i>
+                        {% elif forloop.counter <= rating_avg|add:"0.5"|floatformat:0|add:"0" %}
+                        <i class="fas fa-star-half-alt text-warning"></i>
+                        {% else %}
+                        <i class="far fa-star text-muted"></i>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="text-muted">{{ rating_count }} review{{ rating_count|pluralize }}</div>
+                </div>
+                <div class="col-md-8">
+                    {% for rating in "54321" %}
+                    {% with rating_num=rating|add:"0" %}
+                    {% with percentage=rating_percentage|dictget:rating_num %}
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="me-2" style="min-width: 50px">{{ rating_num }} <span class="d-none d-sm-inline">star{{ rating_num|pluralize }}</span><span
+                                class="d-inline d-sm-none">★</span></div>
+                        <div class="progress flex-grow-1 mx-1" style="height: 10px;">
+                            <div class="progress-bar bg-warning rating-bar" role="progressbar"
+                                 data-percentage="{{ percentage }}"
+                                 aria-valuenow="{{ percentage }}"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"></div>
+                        </div>
+                        <div class="ms-2" style="min-width: 60px">
+                            {{ rating_distribution|dictget:rating_num }} <span class="d-none d-sm-inline">({{ percentage|floatformat:1 }}%)</span>
+                        </div>
+                    </div>
+                    {% endwith %}
+                    {% endwith %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Reviews Section -->
+<section class="mt-5">
+    <div class="card">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">Customer Reviews</h3>
+            <div>
+                <span class="badge bg-primary rounded-pill">
+                    {{ rating_avg|floatformat:1 }} <i class="fas fa-star text-warning"></i>
+                </span>
+                <span class="text-muted ms-2">{{ rating_count }} review{{ rating_count|pluralize }}</span>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if user.is_authenticated and not user_has_reviewed %}
+            <div class="mb-4">
+                <h4>Write a Review</h4>
+                <form action="{% url 'store:add_review' product.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_rating" class="form-label">{{ review_form.rating.label }}</label>
+                        {{ review_form.rating }}
+                        {% if review_form.rating.help_text %}
+                        <div class="form-text">{{ review_form.rating.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_title" class="form-label">{{ review_form.title.label }}</label>
+                        {{ review_form.title }}
+                        {% if review_form.title.help_text %}
+                        <div class="form-text">{{ review_form.title.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_comment" class="form-label">{{ review_form.comment.label }}</label>
+                        {{ review_form.comment }}
+                        {% if review_form.comment.help_text %}
+                        <div class="form-text">{{ review_form.comment.help_text }}</div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
+            </div>
+            {% elif user.is_authenticated and user_has_reviewed %}
+            <div class="alert alert-info mb-4">
+                <i class="fas fa-info-circle me-2"></i>You have already reviewed this product. You can update your
+                review below.
+            </div>
+            {% elif not user.is_authenticated %}
+            <div class="alert alert-secondary mb-4">
+                <i class="fas fa-user me-2"></i>Please <a href="{% url 'login' %}?next={{ request.path }}">login</a> to
+                write a review.
+            </div>
+            {% endif %}
+
+            <h4>{{ reviews.count }} Review{{ reviews.count|pluralize }}</h4>
+
+            {% if reviews %}
+            <div class="list-group">
+                {% for review in reviews %}
+                <div class="list-group-item list-group-item-action">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-1">{{ review.title }}</h5>
+                        <div>
+                            {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %}
+                            <i class="fas fa-star text-warning"></i>
+                            {% else %}
+                            <i class="far fa-star text-muted"></i>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <p class="mb-1">{{ review.comment }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">By {{ review.user.username }} on {{ review.created_at }}</small>
+                        {% if user == review.user %}
+                        <div class="d-flex gap-2">
+                            <form action="{% url 'store:add_review' product.id %}" method="post" class="me-2 d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="rating" value="{{ review.rating }}">
+                                <input type="hidden" name="title" value="{{ review.title }}">
+                                <input type="hidden" name="comment" value="{{ review.comment }}">
+                                <button type="button" class="btn btn-sm btn-outline-primary edit-review-btn">
+                                    <i class="fas fa-edit me-1"></i>Edit
+                                </button>
+                            </form>
+                            <form action="{% url 'store:delete_review' review.id %}" method="post" class="d-inline"
+                            ">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash-alt me-1"></i>Delete
+                            </button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if user == review.user %}
+                    <div class="edit-review-form mt-3" style="display: none;">
+                        <form action="{% url 'store:add_review' product.id %}" method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="edit_rating_{{ review.id }}" class="form-label">Rating</label>
+                                <input type="number" name="rating" id="edit_rating_{{ review.id }}" class="form-control"
+                                       min="1" max="5" value="{{ review.rating }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_title_{{ review.id }}" class="form-label">Title</label>
+                                <input type="text" name="title" id="edit_title_{{ review.id }}" class="form-control"
+                                       value="{{ review.title }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit_comment_{{ review.id }}" class="form-label">Comment</label>
+                                <textarea name="comment" id="edit_comment_{{ review.id }}" class="form-control"
+                                          rows="3">{{ review.comment }}</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Review</button>
+                            <button type="button" class="btn btn-outline-secondary cancel-edit-btn">Cancel</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="alert alert-light">
+                <i class="fas fa-comment-slash me-2"></i>No reviews yet. Be the first to review this product!
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Related Products -->
+{% if related_products %}
+<section class="mt-5">
+    <h3 class="mb-4">Related Products</h3>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+        {% for product in related_products %}
+        <div class="col mb-2">
+            <div class="card product-card h-100">
+                {% if product.image and product.image != 'default.jpg' %}
+                <img src="/media/product_images/{{ product.image|cut:'product_images/' }}" class="card-img-top img-fluid" alt="{{ product.name }}"
+                     style="height: 180px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light text-center py-4" style="height: 180px;">
+                    <i class="fas fa-image fa-4x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-truncate-2">{{ product.name }}</h5>
+                    <p class="card-text text-muted small">{% if product.category %}{{ product.category.name }}{% else %}Uncategorized{% endif %}</p>
+                    <p class="card-text fw-bold">${{ product.price|floatformat:2 }}</p>
+                    <div class="mt-auto d-grid gap-2">
+                        <a href="{% url 'store:product_detail' product.id %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye me-1 d-none d-sm-inline"></i>View Details
+                        </a>
+                        <a href="{% url 'store:cart_add' product.id %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-cart-plus me-1"></i><span
+                                class="d-none d-sm-inline">Add to Cart</span><span class="d-inline d-sm-none">Add</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<!-- Recently Viewed Products -->
+{% if user.is_authenticated and recently_viewed_products %}
+<section class="mt-5">
+    <h3 class="mb-4">Recently Viewed Products</h3>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+        {% for product in recently_viewed_products %}
+        <div class="col mb-2">
+            <div class="card product-card h-100">
+                {% if product.image and product.image != 'default.jpg' %}
+                <img src="/media/product_images/{{ product.image|cut:'product_images/' }}" class="card-img-top img-fluid" alt="{{ product.name }}"
+                     style="height: 180px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light text-center py-4" style="height: 180px;">
+                    <i class="fas fa-image fa-4x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title text-truncate-2">{{ product.name }}</h5>
+                    <p class="card-text text-muted small">{% if product.category %}{{ product.category.name }}{% else %}Uncategorized{% endif %}</p>
+                    <p class="card-text fw-bold">${{ product.price|floatformat:2 }}</p>
+                    <div class="mt-auto d-grid gap-2">
+                        <a href="{% url 'store:product_detail' product.id %}" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye me-1 d-none d-sm-inline"></i>View Details
+                        </a>
+                        <a href="{% url 'store:cart_add' product.id %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-cart-plus me-1"></i><span
+                                class="d-none d-sm-inline">Add to Cart</span><span class="d-inline d-sm-none">Add</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

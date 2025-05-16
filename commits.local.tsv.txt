@@ -1,0 +1,25 @@
+a690d1f	aymaxine	Tue Apr 22 10:15:22 2025	Initial Django e-commerce project setup
+9bb28ca	aymaxine	Wed Apr 23 11:30:45 2025	Created core models for Product, Category, and Order
+31e03bb	aymaxine	Thu Apr 24 09:22:18 2025	Implemented user authentication and account management
+013c04f	aymaxine	Fri Apr 25 14:45:30 2025	Added product listing and detail views
+c43913e	aymaxine	Sat Apr 26 16:10:25 2025	Created shopping cart functionality with session management
+f35cb00	aymaxine	Sun Apr 27 13:25:40 2025	Implemented checkout process and order handling
+180678a	aymaxine	Mon Apr 28 10:55:12 2025	Added admin customization for product management
+43f9ee0	aymaxine	Tue Apr 29 15:20:35 2025	Implemented wishlist feature for registered users
+cc86e8b	aymaxine	Wed Apr 30 11:45:18 2025	Added product review and rating system
+05f092f	aymaxine	Thu May 1 14:30:27 2025	Created product image upload and management
+f6a45b6	aymaxine	Fri May 2 09:15:42 2025	Added user dashboard with order history
+4df8b2d	aymaxine	Sat May 3 12:40:15 2025	Implemented responsive UI design with Bootstrap
+58a06cd	aymaxine	Sun May 4 16:25:33 2025	Added search functionality with filters
+d335c8b	aymaxine	Mon May 5 10:50:22 2025	Created payment integration system
+0acbf5b	aymaxine	Tue May 6 13:35:47 2025	Added product variant handling (sizes, colors)
+89ca158	aymaxine	Wed May 7 15:20:10 2025	Created product data import from CSV
+c6f1802	aymaxine	Thu May 8 11:45:38 2025	Removed unused files and image creation scripts
+fce3ddb	aymaxine	Fri May 9 14:30:25 2025	Created utility for handling duplicate images
+ce11529	aymaxine	Sat May 10 09:55:14 2025	Updated .gitignore with comprehensive rules
+6990fa6	aymaxine	Sun May 11 12:20:40 2025	Implemented custom error pages (403, 404, 500)
+967ac07	aymaxine	Mon May 12 16:45:22 2025	Configured separate development and production environments
+918496c	aymaxine	Tue May 13 10:15:38 2025	Created utility scripts for environment management
+3fd4117	aymaxine	Wed May 14 13:40:15 2025	Fixed image display on error pages
+70f7f38	aymaxine	Thu May 15 15:25:30 2025	Prepared project for Heroku deployment
+42f278f	aymaxine	Fri May 16 09:10:45 2025	Fixed HTTPS redirection issue in development environment
